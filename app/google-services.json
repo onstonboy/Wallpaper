@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "666636079995",
+    "firebase_url": "https://wallpaper-e7cd7.firebaseio.com",
+    "project_id": "wallpaper-e7cd7",
+    "storage_bucket": "wallpaper-e7cd7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666636079995:android:4d5dadb35b729ff9",
+        "android_client_info": {
+          "package_name": "com.onstonboy.csgowallpaper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "666636079995-olvdfbq6lbs3cpi87jimr3vu58rol2r3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.onstonboy.csgowallpaper",
+            "certificate_hash": "ff9dad7f0aa84de46162de1fdc5d09d838fc66df"
+          }
+        },
+        {
+          "client_id": "666636079995-6mk3ibifk4ovuivml0ms57klptr1rtb6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZPzmrdlMN5na1nw6ZCsO2XRVajSTBVUw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "666636079995-6mk3ibifk4ovuivml0ms57klptr1rtb6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
