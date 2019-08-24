@@ -5,15 +5,19 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.firebase.storage.FirebaseStorage
-import com.onstonboy.csgowallpaper.BaseActivity
 import com.onstonboy.csgowallpaper.R
+import com.onstonboy.csgowallpaper.base.BaseActivity
 import com.onstonboy.csgowallpaper.extension.notNull
+import com.onstonboy.csgowallpaper.widget.EndlessRecyclerOnScrollListener
 import kotlinx.android.synthetic.main.activity_dota2_package.*
 
 class Dota2PackageActivity : BaseActivity() {
 
-    private var mStorageRef = FirebaseStorage.getInstance().reference
     private lateinit var mAdapter: Adapter
+    private lateinit var mLayoutManager: GridLayoutManager
+
+    private var mStorageRef = FirebaseStorage.getInstance().reference
+    private var mPageToken: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,21 +25,43 @@ class Dota2PackageActivity : BaseActivity() {
 
         initData()
         handleGetImages()
+        handleEvents()
     }
 
     private fun handleGetImages() {
-        getImagesFromServer("3_heroes_loadingscreen.png")
-        getImagesFromServer("abaddon_endless_night_ls.png")
-        getImagesFromServer("absolute_zero_absolute_zero_loadingscreen.png")
-        getImagesFromServer("abyss_tyrant_abyss_tyrant_loadingscreen.png")
-        getImagesFromServer("aeol_drias_loading_screen.png")
-        getImagesFromServer("aesir_lord_odin_loadingscreen.png")
-        getImagesFromServer("alchemist_convicts_trophy_loading_screen.png")
-        getImagesFromServer("alchemist_jungle_chief_loadingscreen.png")
+        getImagesFromServer(mPageToken)
     }
 
-    private fun getImagesFromServer(url: String) {
-        mStorageRef.child(url).downloadUrl.addOnSuccessListener {
+    private fun getImagesFromServer(pageToken: String?) {
+        val listPageTask = if (pageToken != null) {
+            mStorageRef.list(20, pageToken)
+        } else {
+            mStorageRef.list(20)
+        }
+        listPageTask
+            .addOnSuccessListener { listResult ->
+                val items = listResult.items
+                items.forEach {
+                    getUrlFromServer(it.name)
+                }
+                listResult.pageToken?.let {
+                    mPageToken = it
+                }
+            }.addOnFailureListener {
+                logError(TAG, "error", it)
+            }
+    }
+
+    private fun handleEvents() {
+        recyclerView.addOnScrollListener(object : EndlessRecyclerOnScrollListener(mLayoutManager) {
+            override fun onLoadMore() {
+                handleGetImages()
+            }
+        })
+    }
+
+    private fun getUrlFromServer(nameFile: String) {
+        mStorageRef.child(nameFile).downloadUrl.addOnSuccessListener {
             mAdapter.addData(it.toString())
         }.addOnFailureListener {
             logError(TAG, "error", it)
@@ -43,10 +69,10 @@ class Dota2PackageActivity : BaseActivity() {
     }
 
     private fun initData() {
-        mAdapter = Adapter()
-        val layoutManager = GridLayoutManager(this, 3)
+        mAdapter = Adapter(this)
+        mLayoutManager = GridLayoutManager(this, 3)
         recyclerView.adapter = mAdapter
-        recyclerView.layoutManager = layoutManager
+        recyclerView.layoutManager = mLayoutManager
         val itemDecorator = DividerItemDecoration(this, DividerItemDecoration.HORIZONTAL)
         ContextCompat.getDrawable(this, R.drawable.item_decoration).notNull {
             itemDecorator.setDrawable(it)

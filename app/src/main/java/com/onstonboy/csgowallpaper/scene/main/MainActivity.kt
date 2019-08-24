@@ -8,7 +8,7 @@ import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import com.onstonboy.csgowallpaper.BaseActivity
+import com.onstonboy.csgowallpaper.base.BaseActivity
 import com.onstonboy.csgowallpaper.R
 import com.onstonboy.csgowallpaper.scene.dota2.Dota2PackageActivity
 import kotlinx.android.synthetic.main.activity_main.*
