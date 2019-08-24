@@ -13,4 +13,7 @@
     <string name="menu_tools">Tools</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">Send</string>
+
+    <string name="dota2">dota 2</string>
+    <string name="dota2_package_description">This game only for high level people</string>
 </resources>
