@@ -1,4 +1,4 @@
-package com.onstonboy.csgowallpaper.scene.dota2
+package com.onstonboy.csgowallpaper.scene.imagepackage
 
 import android.os.Bundle
 import androidx.core.content.ContextCompat
@@ -8,10 +8,12 @@ import com.google.firebase.storage.FirebaseStorage
 import com.onstonboy.csgowallpaper.R
 import com.onstonboy.csgowallpaper.base.BaseActivity
 import com.onstonboy.csgowallpaper.extension.notNull
+import com.onstonboy.csgowallpaper.model.Wallpaper
+import com.onstonboy.csgowallpaper.scene.detail.DetailActivity
 import com.onstonboy.csgowallpaper.widget.EndlessRecyclerOnScrollListener
-import kotlinx.android.synthetic.main.activity_dota2_package.*
+import kotlinx.android.synthetic.main.activity_image_package.*
 
-class Dota2PackageActivity : BaseActivity() {
+class PackageActivity : BaseActivity(), Adapter.OnItemClickListener {
 
     private lateinit var mAdapter: Adapter
     private lateinit var mLayoutManager: GridLayoutManager
@@ -21,11 +23,26 @@ class Dota2PackageActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dota2_package)
+        setContentView(R.layout.activity_image_package)
 
         initData()
         handleGetImages()
         handleEvents()
+    }
+
+    override fun onDestroy() {
+        mAdapter.setOnItemClickListener(null)
+        super.onDestroy()
+    }
+
+    override fun onItemClick(wallpaper: Wallpaper) {
+        startActivity(
+            DetailActivity.getInstance(
+                this,
+                mAdapter.dataList,
+                mAdapter.dataList.indexOf(wallpaper)
+            )
+        )
     }
 
     private fun handleGetImages() {
@@ -41,7 +58,7 @@ class Dota2PackageActivity : BaseActivity() {
         listPageTask
             .addOnSuccessListener { listResult ->
                 val items = listResult.items
-                items.forEach {
+                items.sortedBy { it.name }.forEach {
                     getUrlFromServer(it.name)
                 }
                 listResult.pageToken?.let {
@@ -62,7 +79,7 @@ class Dota2PackageActivity : BaseActivity() {
 
     private fun getUrlFromServer(nameFile: String) {
         mStorageRef.child(nameFile).downloadUrl.addOnSuccessListener {
-            mAdapter.addData(it.toString())
+            mAdapter.addData(Wallpaper(it.toString(), nameFile))
         }.addOnFailureListener {
             logError(TAG, "error", it)
         }
@@ -78,6 +95,7 @@ class Dota2PackageActivity : BaseActivity() {
             itemDecorator.setDrawable(it)
         }
         recyclerView.addItemDecoration(itemDecorator)
+        mAdapter.setOnItemClickListener(this)
     }
 
     companion object {

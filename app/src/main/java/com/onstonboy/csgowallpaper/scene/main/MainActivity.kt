@@ -8,9 +8,9 @@ import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import com.onstonboy.csgowallpaper.base.BaseActivity
 import com.onstonboy.csgowallpaper.R
-import com.onstonboy.csgowallpaper.scene.dota2.Dota2PackageActivity
+import com.onstonboy.csgowallpaper.base.BaseActivity
+import com.onstonboy.csgowallpaper.scene.imagepackage.PackageActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -63,6 +63,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     fun onDota2ViewClick(view: View) {
-        startActivity(Intent(this, Dota2PackageActivity::class.java))
+        startActivity(Intent(this, PackageActivity::class.java))
     }
 }
