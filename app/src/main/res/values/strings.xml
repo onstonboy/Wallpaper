@@ -16,4 +16,9 @@
 
     <string name="dota2">dota 2</string>
     <string name="dota2_package_description">This game only for high level people</string>
+
+    <string name="download">Download</string>
+    <string name="downloading">Downloading…</string>
+    <string name="set_wallpaper_successfully">Set wallpaper successfully</string>
+    <string name="processing">Processing</string>
 </resources>

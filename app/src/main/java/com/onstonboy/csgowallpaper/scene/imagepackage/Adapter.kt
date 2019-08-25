@@ -1,4 +1,4 @@
-package com.onstonboy.csgowallpaper.scene.dota2
+package com.onstonboy.csgowallpaper.scene.imagepackage
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,15 +8,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.onstonboy.csgowallpaper.R
 import com.onstonboy.csgowallpaper.base.LoadMoreRecyclerViewAdapter
 import com.onstonboy.csgowallpaper.extension.loadUrlWithPlaceHolder
+import com.onstonboy.csgowallpaper.model.Wallpaper
 import kotlinx.android.synthetic.main.item_grid_image.view.*
 
-class Adapter(context: Context) : LoadMoreRecyclerViewAdapter<String>(context) {
+class Adapter(context: Context) : LoadMoreRecyclerViewAdapter<Wallpaper>(context) {
+
+    private var mOnItemClickListener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.item_grid_image, parent, false)
         if (ITEM_IMAGE == viewType) {
-            return ItemViewHolder(view)
+            return ItemViewHolder(view, mOnItemClickListener)
         }
         return super.onCreateViewHolder(parent, viewType)
     }
@@ -37,15 +40,35 @@ class Adapter(context: Context) : LoadMoreRecyclerViewAdapter<String>(context) {
         return ITEM_IMAGE
     }
 
-    fun addData(url: String) {
-        mDataList.add(url)
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener?) {
+        mOnItemClickListener = onItemClickListener
+    }
+
+    fun addData(wallpaper: Wallpaper) {
+        mDataList.add(wallpaper)
         notifyItemInserted(mDataList.size)
     }
 
-    class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(url: String) {
-            itemView.imageView.loadUrlWithPlaceHolder(url, R.drawable.ic_photo_placeholder)
+    class ItemViewHolder(
+        itemView: View,
+        onItemClickListener: OnItemClickListener?
+    ) : RecyclerView.ViewHolder(itemView) {
+
+        private var mOnItemClickListener = onItemClickListener
+
+        fun bind(wallpaper: Wallpaper) {
+            itemView.imageView.loadUrlWithPlaceHolder(
+                wallpaper.url,
+                R.drawable.ic_photo_placeholder
+            )
+            itemView.imageView.setOnClickListener {
+                mOnItemClickListener?.onItemClick(wallpaper)
+            }
         }
+    }
+
+    interface OnItemClickListener {
+        fun onItemClick(wallpaper: Wallpaper)
     }
 
     companion object {

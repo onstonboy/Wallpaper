@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/black"
-        tools:context=".scene.dota2.Dota2PackageActivity">
+        tools:context=".scene.imagepackage.PackageActivity">
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_margin="@dimen/_1sdp"
